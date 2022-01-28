@@ -54,7 +54,6 @@ be able to fall-through to (eg `file:file` or `forward:forward`).
 netbox [ZONES...] {
   token TOKEN
   url URL
-  localCacheDuration DURATION
   ttl DURATION
   timeout DURATION
   fallthrough [ZONES...]
@@ -66,8 +65,6 @@ netbox [ZONES...] {
   (**REQUIRED**).
 * `url` **URL** defines the URL *netbox* should query. This URL must be
   specified in full as `SCHEME://HOST/api/ipam/ip-addresses` (**REQUIRED**).
-* `localCacheDuration` **DURATION** sets the time to cache responses from
-  NetBox.
 * `ttl` **DURATION** defines the TTL of records returned from *netbox*. Default
   is 1h (3600s).
 * `timeout` **DURATION** defines the HTTP timeout for API requests against
