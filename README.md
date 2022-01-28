@@ -74,19 +74,19 @@ to the next plugin. If **[ZONES…]** is omitted, then fallthrough happens for
 all zones for which the plugin is authoritative. If specific zones are listed
 then only queries for those zones will be subject to fallthrough.
 
-The config parameters `token`, `url` and `localCacheDuration` are required.
+The config parameters `token` and `url` are required.
 
 ## Examples
 
-Send all requests to NetBox:
+Send all requests to NetBox and use the built-in `cache` plugin to cache responses:
 
 ```
 . {
     netbox {
         token SuperSecretNetBoxAPIToken
         url https://netbox.example.org/api/ipam/ip-addresses
-        localCacheDuration 300s
     }
+    cache
 }
 ```
 
@@ -98,7 +98,6 @@ plugin in order to respond to unsupported record types (ie `SOA`, `NS` etc):
     netbox example.org {
         token SuperSecretNetBoxAPIToken
         url https://netbox.example.org/api/ipam/ip-addresses
-        localCacheDuration 300s
         fallthrough
     }
     file db.example.org
@@ -114,7 +113,6 @@ plugin for requests within `example.org`:
     netbox {
         token SuperSecretNetBoxAPIToken
         url https://netbox.example.org/api/ipam/ip-addresses
-        localCacheDuration 300s
         fallthrough example.org
     }
     forward . 1.1.1.1 1.0.0.1
@@ -151,10 +149,19 @@ Host YourHost
    LocalForward 18443 192.168.1.128:8443
 ```
 
+
+## Breaking Changes
+
+Previous versions of the *netbox* plugin supported a "local cache" however
+this functionality has been removed and the configuration option to enable
+the cache (`localCacheDuration`) is no longer supported and will cause an
+error when parsing your `Corefile`.
+
+It is recommended that the native `cache` plugin be used instead.
+
 ## Credits
 
 This plugin is heavily based on the code of the redis-plugin for CoreDNS.
-
 
 [1]: https://netbox.readthedocs.io/en/stable/
 [2]: https://coredns.io/manual/toc/#server-blocks

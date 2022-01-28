@@ -11,12 +11,18 @@
 # Alternatively if netbox was added after hosts then requests that are not
 # answered by hosts will fallthrough to netbox.
 #
+# The use of cache in this example also requires that the cache plugin is
+# before netbox in plugins.cfg so it can handle requests first in order to
+# return cached responses.
+#
+# As shown below the order plugins handle requests is based on the compile
+# time order in plugins.cfg, not the order they appear in your Corefile.
+#
 . {
   debug
   netbox {
     token 0123456789abcdef0123456789abcdef01234567
     url http://localhost:8000/api/ipam/ip-addresses
-    localCacheDuration 1h
   }
 
   hosts {
@@ -24,6 +30,8 @@
     10.0.0.3 definitely-not-in-netbox.org
     fallthrough
   }
+
+  cache
 }
 
 # The following example has requests in example.org handled by netbox:
@@ -32,7 +40,6 @@
 #   netbox example.org {
 #     token 0123456789abcdef0123456789abcdef01234567
 #     url http://localhost:8000/api/ipam/ip-addresses
-#     localCacheDuration 1h
 #   } 
 # }
 #
@@ -43,7 +50,6 @@
 #   netbox example.org example.net {
 #     token 0123456789abcdef0123456789abcdef01234567
 #     url http://localhost:8000/api/ipam/ip-addresses
-#     localCacheDuration 1h
 #   } 
 # }
 #
@@ -58,7 +64,6 @@
 #   netbox {
 #     token 0123456789abcdef0123456789abcdef01234567
 #     url http://localhost:8000/api/ipam/ip-addresses
-#     localCacheDuration 1h
 #     ttl 1800s
 #     fallthrough
 #   }
